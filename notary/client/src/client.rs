@@ -127,6 +127,8 @@ pub struct NotaryClient {
     api_key: Option<String>,
 }
 
+pub static OPACITY_DOMAIN: &str = "opacity.network";
+
 impl NotaryClientBuilder {
     // Default setter of port.
     fn default_port(&self) -> u16 {
@@ -166,7 +168,7 @@ impl NotaryClient {
             let notary_connector = TlsConnector::from(Arc::new(notary_client_config));
             let notary_tls_socket = notary_connector
                 .connect(
-                    self.host.as_str().try_into().map_err(|err| {
+                    OPACITY_DOMAIN.try_into().map_err(|err| {
                         error!("Failed to parse notary server DNS name: {:?}", self.host);
                         ClientError::new(ErrorKind::TlsSetup, Some(Box::new(err)))
                     })?,
